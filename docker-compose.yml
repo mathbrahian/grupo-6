@@ -17,7 +17,7 @@ services:
       resources:
         limits:
           cpus: '0.5'
-          memory: 120M
+          memory: 110M
   
   worker:
     build: worker
