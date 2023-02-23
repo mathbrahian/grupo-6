@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3'
 
 services:
 
@@ -16,25 +16,20 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.50'
-          memory: 50M
-        reservations:
-          cpus: '0.25'
-          memory: 20M
+          cpus: '0.5'
+          memory: 120M
   
   worker:
     build: worker
     volumes:
       - ./worker:/worker
+      - ./photos:/photos
     restart: on-failure
     deploy:
       resources:
         limits:
-          cpus: '0.50'
-          memory: 50M
-        reservations:
-          cpus: '0.25'
-          memory: 20M
+          cpus: '0.01'
+          memory: 45M
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -45,17 +40,13 @@ services:
       - ./server:/server
     ports:
       - 5000:5000
-    environment:
-      FLASK_DEBUG: "on"
     deploy:
       resources:
         limits:
-          cpus: '0.50'
+          cpus: '0.1'
           memory: 50M
-        reservations:
-          cpus: '0.25'
-          memory: 20M
+    environment:
+      FLASK_DEBUG: "on"
     depends_on:
       rabbitmq:
         condition: service_started
-

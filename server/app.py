@@ -7,7 +7,7 @@ app = Flask(__name__)
 api = Api(app)
 
 parser = reqparse.RequestParser()
-parser.add_argument('photo_id', type=int)
+parser.add_argument('path', type=str)
 
 class ApiUploadPhoto(Resource):
     def post(self):
@@ -28,7 +28,7 @@ class ApiUploadPhoto(Resource):
             body=json.dumps(args),
         )
 
-        return {'photo_id' : args['photo_id']}
+        return {'path' : args['path']}
 
 
 api.add_resource(ApiUploadPhoto, '/')
