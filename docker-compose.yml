@@ -1,0 +1,61 @@
+version: '3.9'
+
+services:
+
+  rabbitmq:
+    image: 'rabbitmq:3.11.9-management-alpine'
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+      - '15692:15692'
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 3s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+  
+  worker:
+    build: worker
+    volumes:
+      - ./worker:/worker
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  server:
+    build: server
+    volumes:
+      - ./server:/server
+    ports:
+      - 5000:5000
+    environment:
+      FLASK_DEBUG: "on"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+    depends_on:
+      rabbitmq:
+        condition: service_started
+
