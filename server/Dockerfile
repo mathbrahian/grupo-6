@@ -1,14 +1,7 @@
-FROM python:3.11.2-bullseye
-ENV PYTHONUNBUFFERED=1
+FROM tiangolo/uwsgi-nginx-flask:python3.11
 
-WORKDIR /server
+COPY ./requirements.txt /app/requirements.txt
 
-ENV VIRTUAL_ENV=/opt/venv
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
 
-COPY . .
-
-RUN pip install -r requirements.txt
-
-CMD ["python", "app.py"]
+COPY ./app /app
