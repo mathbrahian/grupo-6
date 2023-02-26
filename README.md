@@ -3,7 +3,7 @@ default_user: guest
 default_pass: guest
 
 
-http://localhost:5000/
+http://localhost/
 {
   "path": "/photos/cabra.jpg"
 }
