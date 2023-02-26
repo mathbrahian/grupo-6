@@ -34,7 +34,7 @@ services:
       rabbitmq:
         condition: service_healthy
 
-  server:
+  app_server:
     build: server
     volumes:
       - ./server:/server
@@ -49,4 +49,12 @@ services:
       FLASK_DEBUG: "on"
     depends_on:
       rabbitmq:
+        condition: service_started
+  
+  nginx:
+    build: nginx
+    ports:
+      - 80:80
+    depends_on:
+      app_server:
         condition: service_started
