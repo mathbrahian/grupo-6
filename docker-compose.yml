@@ -35,16 +35,16 @@ services:
         condition: service_healthy
 
   app_server:
-    build: server
+    build: app_server
     volumes:
-      - ./server:/server
-    ports:
-      - 5000:5000
+      - ./app_server:/app_server
     deploy:
       resources:
         limits:
           cpus: '0.1'
           memory: 50M
+      mode: replicated
+      replicas: 2
     environment:
       FLASK_DEBUG: "on"
     depends_on:
